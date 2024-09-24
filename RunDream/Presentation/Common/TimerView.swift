@@ -16,7 +16,7 @@ struct TimerView: View {
     
     var body: some View {
         Text(self.time)
-            .font(.pretendard(size: 17, weight: .medium))
+            .font(.pretendard(size: 17, weight: .regular))
             .foregroundColor(Color.labelNormal)
             .padding(.vertical, 4)
             .frame(width: self.cellWidth, alignment: .center)

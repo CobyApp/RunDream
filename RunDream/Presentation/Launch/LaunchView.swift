@@ -27,7 +27,7 @@ struct LaunchView: View {
                         VStack(spacing: 8) {
                             HStack {
                                 Text("Run Dream!")
-                                    .font(.pretendard(size: 24, weight: .semibold))
+                                    .font(.pretendard(size: 24, weight: .bold))
                                     .foregroundColor(Color.labelNormal)
                                 
                                 Spacer()
@@ -74,7 +74,7 @@ struct LaunchView: View {
                 .buttonStyle(
                     CBButtonStyle(
                         isDisabled: self.code.count == 0 || self.textFieldState == .error,
-                        buttonColor: Color.black
+                        buttonColor: Color.labelNormal
                     )
                 )
                 .padding(.bottom, BaseSize.verticalPadding)
