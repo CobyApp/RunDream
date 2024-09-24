@@ -11,7 +11,7 @@ struct DryerView: View {
     
     var cellWidth: CGFloat
     var isDisabled: Bool
-    var time: String
+    var endedAt: Date
     
     var body: some View {
         VStack(spacing: 8) {
@@ -21,7 +21,7 @@ struct DryerView: View {
                 .grayscale(isDisabled ? 1.0 : 0.0)
                 .opacity(isDisabled ? 0.5 : 1.0)
             
-            TimerView(time: self.time, cellWidth: self.cellWidth)
+            TimerView(endedAt: self.endedAt, cellWidth: self.cellWidth)
         }
     }
 }

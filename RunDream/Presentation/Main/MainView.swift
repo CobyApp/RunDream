@@ -25,6 +25,8 @@ struct MainView: View {
     
     private let cellWidth: CGFloat = (BaseSize.fullWidth - 16) / 3
     
+    private let timer = Timer.publish(every: 10, on: .main, in: .common).autoconnect()
+    
     var body: some View {
         VStack(spacing: 0) {
             TopBarView(
@@ -49,7 +51,7 @@ struct MainView: View {
                                 DryerView(
                                     cellWidth: self.cellWidth,
                                     isDisabled: dryer.endedAt > Date(),
-                                    time: self.getRemainingTimeString(from: dryer.endedAt)
+                                    endedAt: dryer.endedAt
                                 )
                                 .onTapGesture {
                                     self.selectedDryer = dryer
@@ -80,7 +82,7 @@ struct MainView: View {
                                 WasherView(
                                     cellWidth: self.cellWidth,
                                     isDisabled: washer.endedAt > Date(),
-                                    time: self.getRemainingTimeString(from: washer.endedAt)
+                                    endedAt: washer.endedAt
                                 )
                                 .onTapGesture {
                                     self.selectedWasher = washer
@@ -173,27 +175,6 @@ struct MainView: View {
         } message: {
             Text("세탁기 시간을 잘못 입력했거나, 사용을 중단하시겠습니까?")
         }
-    }
-}
-
-extension View {
-    func getRemainingTimeString(from endedAt: Date) -> String {
-        let currentTime = Date()
-        
-        // 남은 시간이 endedAt보다 작거나 같으면 "00:00" 반환
-        if endedAt <= currentTime {
-            return "00:00"
-        }
-        
-        // 현재 시간과 endedAt의 차이를 초 단위로 계산
-        let timeDifference = Int(endedAt.timeIntervalSince(currentTime))
-        
-        // 시와 분으로 변환, 초가 있으면 올림 처리
-        let hours = timeDifference / 3600
-        let minutes = Int(ceil(Double(timeDifference % 3600) / 60.0))  // 올림 처리
-        
-        // "00:00" 형식으로 반환
-        return String(format: "%02d:%02d", hours, minutes)
     }
 }
 

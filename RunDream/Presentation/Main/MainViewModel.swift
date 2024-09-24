@@ -15,13 +15,19 @@ class MainViewModel: ObservableObject {
     @Published var dryers: [Dryer] = []
     @Published var washers: [Washer] = []
     
-    private var firestoreListener: ListenerRegistration?
+    private var dryerListener: ListenerRegistration?
+    private var washerListener: ListenerRegistration?
     
     init() {
         self.fetchDryers()
         self.fetchWashers()
         self.addDryersListener()
         self.addWashersListener()
+    }
+    
+    deinit {
+        self.dryerListener?.remove()
+        self.washerListener?.remove()
     }
     
     func fetchDryers() {
@@ -61,8 +67,8 @@ class MainViewModel: ObservableObject {
     }
     
     func addDryersListener() {
-        self.firestoreListener?.remove()
-        self.firestoreListener = FirebaseManager.shared.firestore
+        self.dryerListener?.remove()
+        self.dryerListener = FirebaseManager.shared.firestore
             .collection("dryer")
             .order(by: "number")
             .addSnapshotListener { querySnapshot, error in
@@ -74,11 +80,7 @@ class MainViewModel: ObservableObject {
                 querySnapshot?.documentChanges.forEach({ change in
                     if change.type == .modified {
                         if let updatedDryer = try? change.document.data(as: Dryer.self) {
-                            if let index = self.dryers.firstIndex(where: { $0.number == updatedDryer.number }) {
-                                self.dryers[index] = updatedDryer
-                            } else {
-                                self.dryers.append(updatedDryer)
-                            }
+                            self.updateItem(in: &self.dryers, with: updatedDryer) { $0.number == $1.number }
                         }
                     }
                 })
@@ -86,8 +88,8 @@ class MainViewModel: ObservableObject {
     }
     
     func addWashersListener() {
-        self.firestoreListener?.remove()
-        self.firestoreListener = FirebaseManager.shared.firestore
+        self.washerListener?.remove()
+        self.washerListener = FirebaseManager.shared.firestore
             .collection("washer")
             .order(by: "number")
             .addSnapshotListener { querySnapshot, error in
@@ -99,11 +101,7 @@ class MainViewModel: ObservableObject {
                 querySnapshot?.documentChanges.forEach({ change in
                     if change.type == .modified {
                         if let updatedWasher = try? change.document.data(as: Washer.self) {
-                            if let index = self.washers.firstIndex(where: { $0.number == updatedWasher.number }) {
-                                self.washers[index] = updatedWasher
-                            } else {
-                                self.washers.append(updatedWasher)
-                            }
+                            self.updateItem(in: &self.washers, with: updatedWasher) { $0.number == $1.number }
                         }
                     }
                 })
@@ -160,6 +158,14 @@ class MainViewModel: ObservableObject {
                 }
                 print("Washer endedAt successfully updated.")
             }
+        }
+    }
+    
+    func updateItem<T: Identifiable & Equatable>(in array: inout [T], with newItem: T, match: (T, T) -> Bool) {
+        if let index = array.firstIndex(where: { match($0, newItem) }) {
+            array[index] = newItem
+        } else {
+            array.append(newItem)
         }
     }
 }

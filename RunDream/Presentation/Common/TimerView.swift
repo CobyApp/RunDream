@@ -11,11 +11,19 @@ import CobyDS
 
 struct TimerView: View {
     
-    var time: String
+    @State private var currentTime: String = ""
+    
+    var endedAt: Date
     var cellWidth: CGFloat
     
+    var time: String {
+        self.getRemainingTimeString(from: self.endedAt)
+    }
+    
+    let timer = Timer.publish(every: 10, on: .main, in: .common).autoconnect()
+    
     var body: some View {
-        Text(self.time)
+        Text(self.currentTime)
             .font(.pretendard(size: 17, weight: .regular))
             .foregroundColor(Color.labelNormal)
             .padding(.vertical, 4)
@@ -26,9 +34,13 @@ struct TimerView: View {
                 RoundedRectangle(cornerRadius: 8)
                     .stroke(Color.lineNormalNeutral, lineWidth: 1)
             )
+            .onAppear {
+                // Initial time setup
+                self.currentTime = self.time
+            }
+            .onReceive(timer) { _ in
+                // Update time every 10 seconds
+                self.currentTime = self.time
+            }
     }
-}
-
-#Preview {
-    TimerView(time: "01:00", cellWidth: 100)
 }
