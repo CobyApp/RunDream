@@ -20,7 +20,7 @@ struct TimerView: View {
         self.getRemainingTimeString(from: self.endedAt)
     }
     
-    let timer = Timer.publish(every: 10, on: .main, in: .common).autoconnect()
+    let timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
     
     var body: some View {
         Text(self.currentTime)
