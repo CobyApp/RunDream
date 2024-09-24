@@ -13,6 +13,8 @@ struct MainView: View {
     
     @ObservedObject private var viewModel = MainViewModel()
     
+    @State private var showSheet: Bool = false
+    
     @State private var showingDryerAlert: Bool = false
     @State private var showingWasherAlert: Bool = false
     @State private var time: String = ""
@@ -32,7 +34,12 @@ struct MainView: View {
             TopBarView(
                 barType: .filled,
                 leftSide: .title,
-                leftTitle: "Run Dream!"
+                leftTitle: "Run Dream!",
+                rightSide: .icon,
+                rightIcon: UIImage(systemName: "questionmark.circle"),
+                rightAction: {
+                    self.showSheet = true
+                }
             )
             
             ScrollView(showsIndicators: false) {
@@ -102,6 +109,9 @@ struct MainView: View {
                 .padding(.vertical, BaseSize.verticalPadding)
                 .padding(.horizontal, BaseSize.horizantalPadding)
             }
+        }
+        .sheet(isPresented: self.$showSheet) {
+            GuideView()
         }
         .alert("건조기 시간", isPresented: self.$showingDryerAlert) {
             TextField(self.time, text: self.$time)

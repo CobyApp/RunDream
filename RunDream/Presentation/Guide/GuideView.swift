@@ -11,7 +11,7 @@ import CobyDS
 
 struct GuideView: View {
     
-    @State private var isPassed: Bool = false
+    @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
         VStack(spacing: 0) {
@@ -101,7 +101,7 @@ struct GuideView: View {
             }
             
             Button {
-                self.isPassed = true
+                self.presentationMode.wrappedValue.dismiss()
             } label: {
                 Text("확인")
             }
@@ -113,10 +113,6 @@ struct GuideView: View {
             .padding(.bottom, BaseSize.verticalPadding)
         }
         .padding(.horizontal, BaseSize.horizantalPadding)
-        .navigationDestination(isPresented: self.$isPassed) {
-            MainView()
-                .navigationBarHidden(true)
-        }
     }
 }
 
