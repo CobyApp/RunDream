@@ -22,6 +22,7 @@ struct ContentView: View {
             }
         }        
         .loadCustomFonts()
+        .background(Color.backgroundNormalNormal)
     }
 }
 
