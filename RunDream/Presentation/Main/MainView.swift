@@ -27,6 +27,12 @@ struct MainView: View {
     @State private var selectedDryer: Dryer?
     @State private var selectedWasher: Washer?
     
+    private var columns: [GridItem] = [
+        GridItem(.flexible()),
+        GridItem(.flexible()),
+        GridItem(.flexible())
+    ]
+    
     private let cellWidth: CGFloat = (BaseSize.fullWidth - 16) / 3
     
     private let timer = Timer.publish(every: 10, on: .main, in: .common).autoconnect()
@@ -60,8 +66,8 @@ struct MainView: View {
                                 Spacer()
                             }
                             
-                            HStack(spacing: 8) {
-                                ForEach(self.viewModel.dryers, id: \.id) { dryer in
+                            LazyVGrid(columns: self.columns, spacing: 8) {
+                                ForEach(self.viewModel.dryers, id: \.self) { dryer in
                                     DryerView(
                                         cellWidth: self.cellWidth,
                                         isDisabled: dryer.endedAt > Date(),
@@ -77,8 +83,6 @@ struct MainView: View {
                                         }
                                     }
                                 }
-                                
-                                Spacer()
                             }
                         }
                     }
@@ -93,7 +97,7 @@ struct MainView: View {
                                 Spacer()
                             }
                             
-                            HStack(spacing: 8) {
+                            LazyVGrid(columns: self.columns, spacing: 8) {
                                 ForEach(self.viewModel.washers, id: \.id) { washer in
                                     WasherView(
                                         cellWidth: self.cellWidth,

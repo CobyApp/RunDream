@@ -7,7 +7,7 @@
 
 import FirebaseFirestore
 
-struct Washer: Codable, Identifiable, Equatable {
+struct Washer: Codable, Identifiable, Equatable, Hashable {
     @DocumentID var id: String?
     let number: Int
     var endedAt: Date
