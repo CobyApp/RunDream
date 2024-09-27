@@ -50,60 +50,64 @@ struct MainView: View {
             
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 40) {
-                    VStack(spacing: 20) {
-                        HStack {
-                            Text("건조기")
-                                .font(.pretendard(size: 18, weight: .semibold))
-                                .foregroundColor(Color.labelNormal)
-                            
-                            Spacer()
-                        }
-                        
-                        HStack(spacing: 8) {
-                            ForEach(self.viewModel.dryers, id: \.id) { dryer in
-                                DryerView(
-                                    cellWidth: self.cellWidth,
-                                    isDisabled: dryer.endedAt > Date(),
-                                    endedAt: dryer.endedAt
-                                )
-                                .onTapGesture {
-                                    self.selectedDryer = dryer
-                                    
-                                    if dryer.endedAt > Date() {
-                                        self.showingDryerCancelAlert = true
-                                    } else {
-                                        self.showingDryerAlert = true
-                                    }
-                                }
+                    if self.viewModel.dryers.count > 0 {
+                        VStack(spacing: 20) {
+                            HStack {
+                                Text("건조기")
+                                    .font(.pretendard(size: 18, weight: .semibold))
+                                    .foregroundColor(Color.labelNormal)
+                                
+                                Spacer()
                             }
                             
-                            Spacer()
+                            HStack(spacing: 8) {
+                                ForEach(self.viewModel.dryers, id: \.id) { dryer in
+                                    DryerView(
+                                        cellWidth: self.cellWidth,
+                                        isDisabled: dryer.endedAt > Date(),
+                                        endedAt: dryer.endedAt
+                                    )
+                                    .onTapGesture {
+                                        self.selectedDryer = dryer
+                                        
+                                        if dryer.endedAt > Date() {
+                                            self.showingDryerCancelAlert = true
+                                        } else {
+                                            self.showingDryerAlert = true
+                                        }
+                                    }
+                                }
+                                
+                                Spacer()
+                            }
                         }
                     }
                     
-                    VStack(spacing: 20) {
-                        HStack {
-                            Text("세탁기")
-                                .font(.pretendard(size: 18, weight: .semibold))
-                                .foregroundColor(Color.labelNormal)
+                    if self.viewModel.washers.count > 0 {
+                        VStack(spacing: 20) {
+                            HStack {
+                                Text("세탁기")
+                                    .font(.pretendard(size: 18, weight: .semibold))
+                                    .foregroundColor(Color.labelNormal)
+                                
+                                Spacer()
+                            }
                             
-                            Spacer()
-                        }
-                        
-                        HStack(spacing: 8) {
-                            ForEach(self.viewModel.washers, id: \.id) { washer in
-                                WasherView(
-                                    cellWidth: self.cellWidth,
-                                    isDisabled: washer.endedAt > Date(),
-                                    endedAt: washer.endedAt
-                                )
-                                .onTapGesture {
-                                    self.selectedWasher = washer
-                                    
-                                    if washer.endedAt > Date() {
-                                        self.showingWasherCancelAlert = true
-                                    } else {
-                                        self.showingWasherAlert = true
+                            HStack(spacing: 8) {
+                                ForEach(self.viewModel.washers, id: \.id) { washer in
+                                    WasherView(
+                                        cellWidth: self.cellWidth,
+                                        isDisabled: washer.endedAt > Date(),
+                                        endedAt: washer.endedAt
+                                    )
+                                    .onTapGesture {
+                                        self.selectedWasher = washer
+                                        
+                                        if washer.endedAt > Date() {
+                                            self.showingWasherCancelAlert = true
+                                        } else {
+                                            self.showingWasherAlert = true
+                                        }
                                     }
                                 }
                             }
