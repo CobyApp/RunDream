@@ -11,14 +11,14 @@ import CobyDS
 
 struct ContentView: View {
     
-    @AppStorage("isPassed") private var isPassed: Bool = false
+    @AppStorage("teamId") private var teamId: String = ""
     
     var body: some View {
         Group {
-            if self.isPassed {
-                MainView()
-            } else {
+            if self.teamId == "" {
                 LaunchView()
+            } else {
+                MainView()
             }
         }        
         .loadCustomFonts()

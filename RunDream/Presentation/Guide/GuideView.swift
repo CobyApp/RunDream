@@ -86,14 +86,6 @@ struct GuideView: View {
                                 
                                 Spacer()
                             }
-                            
-                            HStack {
-                                Text("· 다른 반에도 소문내러 가주세요.")
-                                    .font(.pretendard(size: 16, weight: .regular))
-                                    .foregroundColor(Color.labelNormal)
-                                
-                                Spacer()
-                            }
                         }
                     }
                 }

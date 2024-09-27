@@ -22,6 +22,8 @@ struct MainView: View {
     @State private var showingDryerCancelAlert: Bool = false
     @State private var showingWasherCancelAlert: Bool = false
     
+    @State private var showingOutAlert: Bool = false
+    
     @State private var selectedDryer: Dryer?
     @State private var selectedWasher: Washer?
     
@@ -33,12 +35,16 @@ struct MainView: View {
         VStack(spacing: 0) {
             TopBarView(
                 barType: .filled,
-                leftSide: .title,
-                leftTitle: "Run Dream!",
-                rightSide: .icon,
-                rightIcon: UIImage(systemName: "questionmark.circle"),
-                rightAction: {
+                leftSide: .icon,
+                leftIcon: UIImage(systemName: "questionmark.circle"),
+                leftAction: {
                     self.showSheet = true
+                },
+                title: "Run Dream!",
+                rightSide: .icon,
+                rightIcon: UIImage(resource: .out),
+                rightAction: {
+                    self.showingOutAlert = true
                 }
             )
             
@@ -184,6 +190,15 @@ struct MainView: View {
             })
         } message: {
             Text("세탁기 시간을 잘못 입력했거나, 사용을 중단하시겠습니까?")
+        }
+        .alert("그룹 나가기", isPresented: self.$showingOutAlert) {
+            Button("확인", action: {
+                self.viewModel.teamId = ""
+            })
+            
+            Button("취소", role: .cancel, action: {})
+        } message: {
+            Text("그룹을 나가시겠습니까?")
         }
     }
 }

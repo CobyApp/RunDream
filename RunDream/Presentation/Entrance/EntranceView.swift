@@ -11,21 +11,23 @@ import CobyDS
 
 struct EntranceView: View {
     
+    @Environment(\.dismiss) private var dismiss
+    
+    @Binding var verifiedCode: String
+    @Binding var id: String
+    
     @State private var code: String = ""
     @State private var textFieldState: TextFieldState = .enabled
-    @State private var isPassed: Bool = false
     
-    @AppStorage("isPassed") private var isPassedUser: Bool = false
-    
-    private var verifiedCode: String = "gyc6기"
+    @AppStorage("teamId") private var teamId: String = ""
     
     var body: some View {
         VStack(spacing: 0) {
             TopBarView(
                 leftAction: {
-                    
+                    self.dismiss()
                 },
-                title: "방 입장"
+                title: "그룹 입장"
             )
             
             ScrollView(showsIndicators: false) {
@@ -52,8 +54,7 @@ struct EntranceView: View {
             
             Button {
                 if self.code == self.verifiedCode {
-                    self.isPassedUser = true
-                    self.isPassed = true
+                    self.teamId = self.id
                 } else {
                     self.textFieldState = .error
                 }
@@ -72,14 +73,5 @@ struct EntranceView: View {
         .onTapGesture {
             self.closeKeyboard()
         }
-        .navigationDestination(isPresented: self.$isPassed) {
-            GuideView()
-                .navigationBarHidden(true)
-        }
     }
-}
-
-#Preview {
-    EntranceView()
-        .loadCustomFonts()
 }
